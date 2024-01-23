@@ -37,6 +37,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
+from matplotlib.ticker import FuncFormatter
 import matplotlib.ticker as ticker
 import matplotlib.dates as mdates
 from ebmdatalab import bq
@@ -62,7 +63,11 @@ df = bq.cached_read(sql, csv_path=exportfile, use_cache=False)
 #filter out anything before Oct 2019, so there is always 12 months data in the rolling figure
 df = df[df['month'] >= '2019-10-01']
 
+
 # +
+#define y axis percentage formatter
+def percentage_formatter(x, pos):
+    return f'{x:.0%}'
 #create decile chart for 1 month data using user ICB as example
 charts.deciles_chart(
         df,
@@ -74,8 +79,9 @@ charts.deciles_chart(
 #add in user ICB
 df_subject = df.loc[df['pct_id'] == '92G']
 plt.plot(df_subject['month'], df_subject['calc_value'], 'r--')
-plt.show()
-plt.savefig(os.path.join("..","1_month.png"),dpi=300) #save plot in root directory as png
+plt.gca().yaxis.set_major_formatter(FuncFormatter(percentage_formatter))
+plt.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))
+plt.savefig(os.path.join("..","1_month.png"),dpi=300, bbox_inches='tight') #save plot in root directory as png
 
 # +
 #create decile chart for 12 month rolling data using user ICB as example
@@ -89,8 +95,9 @@ charts.deciles_chart(
 #add in user ICB
 df_subject = df.loc[df['pct_id'] == '92G']
 plt.plot(df_subject['month'], df_subject['rolling_calc_value'], 'r--')
-plt.show()
-plt.savefig(os.path.join("..","12_month.png"),dpi=300) #save plot in root directory as png
+plt.gca().yaxis.set_major_formatter(FuncFormatter(percentage_formatter))
+plt.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0))
+plt.savefig(os.path.join("..","12_month.png"),dpi=300, bbox_inches='tight') #save plot in root directory as png
 # +
 
 
