@@ -88,7 +88,7 @@ charts.deciles_chart(
 
 #add in user ICB
 df_subject = df.loc[df['pct_id'] == '92G']
-plt.plot(df_subject['month'], df_subject['calc_value'], 'r--')
+plt.plot(df_subject['month'], df_subject['rolling_calc_value'], 'r--')
 plt.show()
 plt.savefig(os.path.join("..","12_month.png"),dpi=300) #save plot in root directory as png
 # +
